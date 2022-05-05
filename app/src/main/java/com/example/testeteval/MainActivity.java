@@ -3,6 +3,7 @@ package com.example.testeteval;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,12 +12,25 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.testeteval.Model.Etudiant;
+import com.example.testeteval.Model.Professeur;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
     String[] etudiants = {"toto", "momo", "fifi", "lili"};
     String[] professeurs = {"omar", "ali", "assimdll", "mohamed"};
     String[] mdpEtd = {"azerty", "1234", "0000", "user"};
     String[] mdpProf = {"yuiop", "12345", "abcd", "8888"};
     String[] professions = {"Etudiant", "Professeur"};
+    List<Professeur>data=new ArrayList<>();
 
     public static int findIndex(String arr[], String mot)
     {
@@ -57,6 +71,56 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, professions);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         profession.setAdapter(dataAdapterR);
+
+        Retrofit retrofit=new Retrofit
+                .Builder()
+                .baseUrl("http://10.0.2.2:8087/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        //
+        RestApi serviceApi=retrofit.create(RestApi.class); //instanciation dynamique
+
+       Call<List<Professeur>> callUsers=serviceApi.listProfesseurs();  //appel
+
+        Call<List<Etudiant>>calletudiants=serviceApi.listEtudiants();
+
+        //appel prof
+        callUsers.enqueue(new Callback<List<Professeur>>() {
+            @Override
+            public void onResponse(Call<List<Professeur>> call, Response<List<Professeur>> response) {
+                Log.i("info","sucess");
+                List<Professeur> users=response.body();
+               dataAdapterR.notifyDataSetChanged();
+                System.out.println(users);
+            }
+
+            @Override
+            public void onFailure(Call<List<Professeur>> call, Throwable t) {
+                Log.i("info","echec");
+                Log.i("error",t.getMessage());
+
+            }
+        });
+
+        //appel etudiants
+
+        calletudiants.enqueue(new Callback<List<Etudiant>>() {
+            @Override
+            public void onResponse(Call<List<Etudiant>> call, Response<List<Etudiant>> response) {
+                Log.i("info","sucess");
+                List<Etudiant> users=response.body();
+                dataAdapterR.notifyDataSetChanged();
+                System.out.println(users);
+            }
+
+            @Override
+            public void onFailure(Call<List<Etudiant>> call, Throwable t) {
+                Log.i("info","echec");
+                Log.i("error",t.getMessage());
+            }
+        });
+
+
 
         button.setOnClickListener(new View.OnClickListener() {
             String selected_profession ="";
