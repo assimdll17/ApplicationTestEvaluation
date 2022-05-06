@@ -1,7 +1,11 @@
 package com.example.testeteval.service;
 
-import com.example.testeteval.model.Etudiant;
-import com.example.testeteval.model.Professeur;
+import com.example.testeteval.Model.Etudiant;
+import com.example.testeteval.Model.Professeur;
+import com.example.testeteval.Model.Questionnaire;
+
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,4 +17,7 @@ public interface RestServiceAPI {
 
     @GET("prof")
     Call<Professeur> profByUserName(@Query("q") String key);
+
+    @GET("questionnaires")
+    Call<List<Questionnaire>> getAllquestionnaire();
 }

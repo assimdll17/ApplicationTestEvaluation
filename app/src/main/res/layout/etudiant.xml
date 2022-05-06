@@ -7,11 +7,12 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:layout_width="387dp"
+        android:layout_height="52dp"
+        android:text="Choisir un Questionnaire" />
 
     <ListView
+        android:id="@+id/questionnairelistev"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -2,6 +2,7 @@ package com.example.testeteval;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,15 +13,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+
 import com.example.testeteval.Model.Etudiant;
 import com.example.testeteval.Model.Professeur;
+import com.example.testeteval.service.RestServiceAPI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -67,58 +69,20 @@ public class MainActivity extends AppCompatActivity {
         TextView badcred = findViewById(R.id.badcred);
         Spinner profession = findViewById(R.id.profession);
         Button button = findViewById(R.id.button);
+        Button button1=findViewById(R.id.button2);
 
         ArrayAdapter<String> dataAdapterR = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, professions);
         dataAdapterR.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         profession.setAdapter(dataAdapterR);
 
-        Retrofit retrofit=new Retrofit
-                .Builder()
-                .baseUrl("http://10.0.2.2:8087/")
+        Retrofit retrofit=new Retrofit.Builder().baseUrl("https://10.0.2.2:8087/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
+        RestServiceAPI serviceApi=retrofit.create(RestServiceAPI.class);
 
-        //
-        RestApi serviceApi=retrofit.create(RestApi.class); //instanciation dynamique
 
-       Call<List<Professeur>> callUsers=serviceApi.listProfesseurs();  //appel
+       Call<Professeur> callUsers=serviceApi.profByUserName("key");  //appel
 
-        Call<List<Etudiant>>calletudiants=serviceApi.listEtudiants();
-
-        //appel prof
-        callUsers.enqueue(new Callback<List<Professeur>>() {
-            @Override
-            public void onResponse(Call<List<Professeur>> call, Response<List<Professeur>> response) {
-                Log.i("info","sucess");
-                List<Professeur> users=response.body();
-               dataAdapterR.notifyDataSetChanged();
-                System.out.println(users);
-            }
-
-            @Override
-            public void onFailure(Call<List<Professeur>> call, Throwable t) {
-                Log.i("info","echec");
-                Log.i("error",t.getMessage());
-
-            }
-        });
-
-        //appel etudiants
-
-        calletudiants.enqueue(new Callback<List<Etudiant>>() {
-            @Override
-            public void onResponse(Call<List<Etudiant>> call, Response<List<Etudiant>> response) {
-                Log.i("info","sucess");
-                List<Etudiant> users=response.body();
-                dataAdapterR.notifyDataSetChanged();
-                System.out.println(users);
-            }
-
-            @Override
-            public void onFailure(Call<List<Etudiant>> call, Throwable t) {
-                Log.i("info","echec");
-                Log.i("error",t.getMessage());
-            }
-        });
+        Call<Etudiant>calletudiants=serviceApi.etudiantByUserName("name");
 
 
 
@@ -142,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 if(profession.getSelectedItem().toString()=="Etudiant"){
                     int i = findIndex(etudiants,username.getText().toString());
                     System.out.println(i);
+
                     if(mdpEtd[i]==password.getText().toString()){
                         badcred.setText("Vous etes connectés en tant qu'étudiant");
                     }
@@ -162,6 +127,14 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("Selectionnéééééééééééé "+profession.getSelectedItem().toString());
             }
 
+        });
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent next=new Intent(getApplicationContext(),EtudiantMainActivity.class);
+                startActivity(next);
+            }
         });
     }
 }

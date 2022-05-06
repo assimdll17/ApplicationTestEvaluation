@@ -1,8 +1,6 @@
-package com.example.testeteval.model;
+package com.example.testeteval.Model;
 
-import java.io.Serializable;
-
-public class Professeur implements Serializable {
+public class Professeur {
     private Long profId;
     private String firstName;
     private String lastName;

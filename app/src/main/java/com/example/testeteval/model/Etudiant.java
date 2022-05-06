@@ -1,5 +1,4 @@
-package com.example.testeteval.model;
-
+package com.example.testeteval.Model;
 import java.io.Serializable;
 
 public class Etudiant implements Serializable {
