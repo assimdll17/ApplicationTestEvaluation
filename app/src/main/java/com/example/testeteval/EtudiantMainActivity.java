@@ -32,10 +32,13 @@ public class EtudiantMainActivity extends AppCompatActivity {
         ListView listView=findViewById(R.id.questionnairelistev);
        /* ArrayAdapter adapter=new ArrayAdapter(this, android.R.layout.simple_list_item_1,data);
         listView.setAdapter(adapter);*/
+        questionnaires.add(new Questionnaire("test","des",null,null ,null));
 
         AdapterQuestionnaire userAdapter=new AdapterQuestionnaire(this,R.layout.questionnaire_layout,questionnaires);
+        userAdapter.notifyDataSetChanged();
         listView.setAdapter(userAdapter);
-        questionnaires.add(new Questionnaire("test","des",null,null ,null));
+        userAdapter.notifyDataSetChanged();
+
 
         Retrofit retrofit=new Retrofit.Builder().baseUrl("http://10.0.2.2:8087/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
@@ -57,9 +60,10 @@ public class EtudiantMainActivity extends AppCompatActivity {
                     questionnaires.add(a);
                     data.add(a.getTitle());
                 }
+                userAdapter.notifyDataSetChanged();
                // adapter.notifyDataSetChanged();
                 System.out.println(questionnaires);
-                userAdapter.notifyDataSetChanged(); //attention adapter
+               //attention adapter
 
             }
 

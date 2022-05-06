@@ -1,9 +1,10 @@
 package com.example.testeteval.Model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Questionnaire {
+public class Questionnaire  implements Serializable {
     private Long questionnaireId;
     private String title;
     private String description;
@@ -19,8 +20,6 @@ public class Questionnaire {
                 '}';
     }
 
-    public Questionnaire() {
-    }
 
     public Questionnaire(String title, String description, List<Question> questions, Professeur professeur, List<Etudiant> etudiants) {
         this.title = title;

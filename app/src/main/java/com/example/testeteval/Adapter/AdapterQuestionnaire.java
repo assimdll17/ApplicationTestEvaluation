@@ -21,9 +21,10 @@ public class AdapterQuestionnaire extends ArrayAdapter<Questionnaire> {
     private List<Questionnaire>questionnaires;
     private int resource;
     public AdapterQuestionnaire(@NonNull Context context, int resource,List<Questionnaire>quest) {
-        super(context, resource);
+        super(context, resource,quest);
         this.questionnaires=quest;
         this.resource=resource;
+        System.out.println(this.questionnaires);
     }
 
     @NonNull
@@ -31,6 +32,7 @@ public class AdapterQuestionnaire extends ArrayAdapter<Questionnaire> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         View listViewItem=convertView;
+        System.out.println("nullll 2");
         //recup du layout des objets
         if(listViewItem==null){
             //contruire la vue  en fonction des elements du fihier xml==onsetview de oncreate
@@ -46,7 +48,7 @@ public class AdapterQuestionnaire extends ArrayAdapter<Questionnaire> {
         titre.setText(questionnaires.get(position).getTitle());
         des.setText(questionnaires.get(position).getDescription());
 
-        profeseur.setText(questionnaires.get(position).getProfesseur().toString());
+        //profeseur.setText(questionnaires.get(position).getProfesseur().toString());
         rat.setRating(Math.random()>0.6? 3:2);
         System.out.println("ok view");
 
